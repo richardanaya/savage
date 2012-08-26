@@ -1,0 +1,21 @@
+{
+  "name": "savage",
+  "version": "0.0.1-18",
+  "dependencies": {
+    "express": "2.5.9",
+    "jinjs": "latest",
+    "mongodb": "latest",
+    "pwilang": "latest",
+    "mongoose": "latest",
+    "date-utils": "latest",
+    "cron": "latest",
+    "time": "latest"
+  },
+  "subdomain": "savage",
+  "scripts": {
+    "start": "server.js"
+  },
+  "engines": {
+    "node": "0.6.x"
+  }
+}

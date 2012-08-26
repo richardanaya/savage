@@ -1,0 +1,4 @@
+{% extends "base.jinjs" %}
+{% block content %}
+Hello, {{ name }}
+{% endblock %}
