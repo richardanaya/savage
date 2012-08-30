@@ -9,7 +9,8 @@
     "mongoose": "latest",
     "date-utils": "latest",
     "cron": "latest",
-    "time": "latest"
+    "time": "latest",
+    "requirejs": "latest"
   },
   "subdomain": "savage",
   "scripts": {
