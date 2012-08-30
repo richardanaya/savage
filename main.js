@@ -6,6 +6,7 @@ requirejs.config({
 
 requirejs(
     [
+        'date-utils',
         'savage/services/game',
         'savage/services/crafting',
         'savage/services/breeding',

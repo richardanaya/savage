@@ -10,7 +10,8 @@
     "date-utils": "latest",
     "cron": "latest",
     "time": "latest",
-    "requirejs": "latest"
+    "requirejs": "latest",
+    "vows": "latest"
   },
   "subdomain": "savage",
   "scripts": {

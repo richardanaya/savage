@@ -1,8 +1,5 @@
 define(['savage/model'], function (model) {
     return {
-        getId:function (req) {
-            return req.headers['x-secondlife-owner-key'] || "01234567-89ab-cdef-0123-456789abcdef";
-        },
         getOrCreatePlayer:function (id, callback) {
             var cb = function (err, players) {
                 if (players == null || players.length == 0) {

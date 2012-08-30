@@ -1,4 +1,4 @@
-define(['savage/server', 'savage/model' , 'savage/store', 'cron'], function (server, model, store, cron) {
+define(['savage/server', 'savage/model' , 'savage/store', 'savage/util', 'cron'], function (server, model, store, util, cron) {
     var createDeliveryEvent = function (id) {
         var newEvent = new model.Event({ avatar_id:id, type:"DELIVER", date:Date.today().addWeeks(1), executed:false });
         newEvent.save(function (err) {
@@ -61,7 +61,7 @@ define(['savage/server', 'savage/model' , 'savage/store', 'cron'], function (ser
     server.get('/breeding/action',
         function (req, res) {
             var action = req.query.action;
-            var id = store.getId(req);
+            var id = util.getId(req.query);
 
             store.getOrCreatePlayer(id, function (p) {
                 if (action == "breed") {

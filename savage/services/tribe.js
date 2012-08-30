@@ -1,4 +1,4 @@
-define(['savage/server', 'savage/model' , 'savage/store'], function (server, model, store) {
+define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], function (server, model, store, util) {
     var tribeJoin = function (complete, owner, claim) {
         store.getOrCreatePlayer(claim, function (c) {
             if (c.owner == null) {
@@ -36,7 +36,7 @@ define(['savage/server', 'savage/model' , 'savage/store'], function (server, mod
 
     server.get('/tribe/claim',
         function (req, res) {
-            var id = store.getId(req);
+            var id = util.getId(req.query);
             var target = req.query.target;
             tribeJoin(function (err) {
                 if (err) {
@@ -51,7 +51,7 @@ define(['savage/server', 'savage/model' , 'savage/store'], function (server, mod
 
     server.get('/tribe/unclaim',
         function (req, res) {
-            var id = store.getId(req);
+            var id = util.getId(req.query);
             var target = req.query.target;
             tribeUnjoin(function (err) {
                 if (err) {
