@@ -16,13 +16,16 @@ define(function () {
         getPosition:function (data) {
             if (data['x-secondlife-local-position'] || data['position']) {
                 var dataString = data['x-secondlife-local-position'] || data['position'];
-                dataString = dataString.substring(1, dataString.length - 2);
+                dataString = dataString.substring(1, dataString.length - 1);
                 var components = dataString.split(',');
                 return  [parseFloat(components[0].trim()), parseFloat(components[1].trim()), parseFloat(components[2].trim())];
             }
             else {
                 return  obj.DEFAULT_POSITION;
             }
+        },
+        randomElement:function (arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
         }
     };
     return obj;

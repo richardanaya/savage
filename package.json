@@ -1,6 +1,6 @@
 {
   "name": "savage",
-  "version": "0.0.1-21",
+  "version": "0.0.1-23",
   "dependencies": {
     "express": "2.5.9",
     "jinjs": "latest",
