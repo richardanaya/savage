@@ -1,23 +1,23 @@
 define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], function (server, model, store, util) {
-    var FAR_DISTANCE = 10;
-    var CLOSE_DISTANCE = 3;
+    var FAR_DISTANCE = 5;
+    var CLOSE_DISTANCE = 1.5;
     server.get('/crafting/find',
         function (req, res) {
-            var id = util.getId(req.query);
+            var id = util.getId([req.headers,req.query]);
             var tool = req.query.tool;
-            var sim = util.getSim(req.query);
-            var location = util.getPosition(req.query);
+            var sim = util.getSim([req.headers,req.query]);
+            var location = util.getPosition([req.headers,req.query]);
             var px = location[0];
             var py = location[1];
             var pz = location[2];
-            var resources = model.Resource.find({sim:sim, tool:tool}, function (err, docs) {
+            model.Resource.find({sim:sim, tool:tool}, function (err, docs) {
                 var nearest = null;
                 var dist = Infinity;
                 if (docs.length > 0) {
                     for (var i = 0; i < docs.length; i++) {
                         var r = docs[i];
                         var d = Math.sqrt(Math.pow(r.x-px, 2)+Math.pow(r.y-py, 2)+Math.pow(r.z-pz, 2));
-                        if(d < dist && d < CLOSE_DISTANCE){
+                        if(d < dist && d < FAR_DISTANCE){
                             dist = d;
                             nearest = r;
                         }
@@ -46,21 +46,21 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
                             usage.uses = 1;
                             usage.lastUsed = Date.now();
                             nearest.save();
-                            res.send(util.randomElement(nearest.resources));
+                            res.send(util.randomElement(nearest.resources)+'|Using your '+tool+' you retrieve something.');
                         }
                         else{
-                            res.send('');
+                            res.send('|Using your '+tool+' you don\'t find anything.');
                         }
                     }
                     else {
                         usage.uses += 1;
                         usage.lastUsed = Date.now();
                         nearest.save();
-                        res.send(util.randomElement(nearest.resources));
+                        res.send(util.randomElement(nearest.resources)+'|Using your '+tool+' you retrieve something.');
                     }
                 }
                 else {
-                    res.send('');
+                    res.send('|Using your '+tool+' you don\'t find anything.');
                 }
             });
         }
@@ -68,14 +68,14 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
 
     server.get('/crafting/look',
             function (req, res) {
-                var id = util.getId(req.query);
+                var id = util.getId([req.headers,req.query]);
                 var tool = req.query.tool;
-                var sim = util.getSim(req.query);
-                var location = util.getPosition(req.query);
+                var sim = util.getSim([req.headers,req.query]);
+                var location = util.getPosition([req.headers,req.query]);
                 var px = location[0];
                 var py = location[1];
                 var pz = location[2];
-                var resources = model.Resource.find({sim:sim, tool:tool}, function (err, docs) {
+                model.Resource.find({sim:sim, tool:tool}, function (err, docs) {
                     var nearest = null;
                     var dist = Infinity;
                     if (docs.length > 0) {
@@ -88,16 +88,44 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
                             }
                         }
                     }
+                    var canSee = false;
                     if(nearest != null){
-                        if(d<CLOSE_DISTANCE){
-                            res.send('CLOSE');
+                        if(!nearest.usages){
+                            nearest.usages = [];
+                        }
+                        var usage = null;
+                        for(var j = 0; j < nearest.usages.length; j++){
+                            var u = nearest.usages[j];
+                            if(u.avatar_id == id){
+                                usage = u;
+                            }
+                        }
+                        if(usage == null){
+                            usage = {avatar_id:id,uses:0,lastUsed:null};
+                            nearest.usages.push(usage);
+                        }
+                        if(usage.uses>=3){
+                            var n = new Date();
+                            n.addMinutes(-30);
+                            if(n>=usage.lastUsed){
+                                canSee = true;
+                            }
                         }
                         else {
-                            res.send('AROUND');
+                            canSee = true;
+                        }
+                    }
+
+                    if(canSee && nearest != null){
+                        if(d<CLOSE_DISTANCE){
+                            res.send('CLOSE|You found something.');
+                        }
+                        else {
+                            res.send('AROUND|Something is nearby.');
                         }
                     }
                     else {
-                        res.send('FAR');
+                        res.send('FAR|There is nothing nearby.');
                     }
                 });
             }
