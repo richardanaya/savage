@@ -61,7 +61,7 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util', 'cron']
     server.get('/breeding/action',
         function (req, res) {
             var action = req.query.action;
-            var id = util.getId(req.query);
+            var id = util.getId([req.headers,req.query]);
 
             store.getOrCreatePlayer(id, function (p) {
                 if (action == "breed") {

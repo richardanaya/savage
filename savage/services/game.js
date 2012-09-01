@@ -3,7 +3,7 @@ define(['savage/server', 'savage/model', 'savage/store', 'savage/util', 'cron'],
 
     server.get('/status',
         function (req, res) {
-            var id = util.getId(req.query);
+            var id = util.getId([req.headers,req.query]);
             store.getOrCreatePlayer(id, function (player) {
                 res.send(player.status);
             });
@@ -12,7 +12,7 @@ define(['savage/server', 'savage/model', 'savage/store', 'savage/util', 'cron'],
 
     server.get('/gender',
         function (req, res) {
-            var id = util.getId(req.query);
+            var id = util.getId([req.headers,req.query]);
             var name = util.getName(req.headers);
             var genderValue = req.query.value;
             store.getOrCreatePlayer(id, function (player) {

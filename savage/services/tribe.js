@@ -36,7 +36,7 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
 
     server.get('/tribe/claim',
         function (req, res) {
-            var id = util.getId(req.query);
+            var id = util.getId([req.headers,req.query]);
             var target = req.query.target;
             tribeJoin(function (err) {
                 if (err) {
@@ -51,7 +51,7 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
 
     server.get('/tribe/unclaim',
         function (req, res) {
-            var id = util.getId(req.query);
+            var id = util.getId([req.headers,req.query]);
             var target = req.query.target;
             tribeUnjoin(function (err) {
                 if (err) {

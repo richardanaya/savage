@@ -1,7 +1,7 @@
 define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], function (server, model, store, util) {
     server.get('/notifications',
         function (req, res) {
-            var id = util.getId(req.query);
+            var id = util.getId([req.headers,req.query]);
             model.Notification
                 .find({avatar_id:id, sent:false})
                 .exec(function (err, notifications) {
