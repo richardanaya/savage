@@ -1,4 +1,4 @@
-define(['savage/server', 'savage/model' , 'savage/store', 'savage/util', 'cron'], function (server, model, store, util, cron) {
+define(['savage/server', 'savage/model' , 'savage/util', 'cron'], function (server, model, util, cron) {
     var createDeliveryEvent = function (id) {
         var newEvent = new model.Event({ avatar_id:id, type:"DELIVER", date:Date.today().addWeeks(1), executed:false });
         newEvent.save(function (err) {
@@ -32,7 +32,7 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util', 'cron']
                         var ev = events[i];
                         if (ev.date < Date.now()) {
                             if (ev.type == "DELIVER") {
-                                store.getOrCreatePlayer(ev.avatar_id, function (p) {
+                                model.getOrCreatePlayer(ev.avatar_id, function (p) {
                                     p.status = "NORMAL";
                                     createDeliveryNotification(p.avatar_id);
                                     p.update();
@@ -63,10 +63,10 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util', 'cron']
             var action = req.query.action;
             var id = util.getId([req.headers,req.query]);
 
-            store.getOrCreatePlayer(id, function (p) {
+            model.getOrCreatePlayer(id, function (p) {
                 if (action == "breed") {
                     var target = req.query.target;
-                    store.getOrCreatePlayer(target, function (targetPlayer) {
+                    model.getOrCreatePlayer(target, function (targetPlayer) {
                         if (target != id && targetPlayer.gender == "FEMALE") {
                             if (targetPlayer.status != "PREGNANT" && Math.random() < .15) {
                                 targetPlayer.status = "PREGNANT";
@@ -79,7 +79,7 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util', 'cron']
                 }
                 if (action == "takeseed") {
                     var target = req.query.target;
-                    store.getOrCreatePlayer(target, function (targetPlayer) {
+                    model.getOrCreatePlayer(target, function (targetPlayer) {
                         if (target != id && targetPlayer.gender == "MALE") {
                             if (p.status != "PREGNANT" && Math.random() < .15) {
                                 createDeliveryEvent(id);

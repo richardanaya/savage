@@ -1,10 +1,21 @@
-define(['savage/server', 'savage/model', 'savage/store', 'savage/util', 'cron'], function (server, model, store, util, cron) {
+define(['savage/server', 'savage/model', 'savage/util', 'cron'], function (server, model, util, cron) {
     "use strict";
+
+    server.get('/death',
+        function (req, res) {
+            var target = req.query.target;
+            model.getOrCreatePlayer(target, function (player) {
+                player.unclaim();
+                player.honor = 0;
+                player.save();
+            });
+        }
+    );
 
     server.get('/status',
         function (req, res) {
             var id = util.getId([req.headers,req.query]);
-            store.getOrCreatePlayer(id, function (player) {
+            model.getOrCreatePlayer(id, function (player) {
                 res.send(player.status);
             });
         }
@@ -15,7 +26,7 @@ define(['savage/server', 'savage/model', 'savage/store', 'savage/util', 'cron'],
             var id = util.getId([req.headers,req.query]);
             var name = util.getName(req.headers);
             var genderValue = req.query.value;
-            store.getOrCreatePlayer(id, function (player) {
+            model.getOrCreatePlayer(id, function (player) {
                 if (!player.gender || player.gender == "UNKNOWN") {
                     if (genderValue) {
                         player.gender = genderValue;
