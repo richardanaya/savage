@@ -62,6 +62,7 @@ define(['savage/server', 'savage/model' , 'savage/util'], function (server, mode
                     w.tribe.size += 1;
                     w.tribe.honor += p.honor;
                     w.player.name = p.name;
+                    w.player.honor = p.honor;
                     populate(complete);
                 })
             };

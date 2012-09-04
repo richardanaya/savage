@@ -1,0 +1,9 @@
+.tribe {
+    border: black 2px solid;
+    margin: 5px;
+}
+
+.tribeMember {
+    border: black 1px solid;
+    margin: 5px;
+}

@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>The Tribes</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+</head>
+<body>
+
+</body>
+<script>
+    $.getJSON('tribe/all',function(tribes){
+        for(var i = 0 ; i < tribes.length; i++){
+            var t = tribes[i];
+            var rootElement = $('<div class="tribe">Tribe: '+t.name+' Honor:'+ t.honor+' Size:'+ t.size+'</div>').get(0);
+            $(document.body).append(rootElement)
+            var buildTribe = function(parentelement,node){
+                var el = $('<div class="tribeMember">'+node.name+' Honor: '+node.honor+'</div>').get(0);
+                $(parentelement).append(el);
+                for(var j = 0 ; j < node.claims.length; j++){
+                    buildTribe(el, node.claims[j]);
+                }
+            }
+            buildTribe(rootElement, t.members);
+        }
+    });
+</script>
+</html>
