@@ -1,6 +1,6 @@
 define(['savage/server', 'savage/model' , 'savage/util', 'cron'], function (server, model, util, cron) {
     var createDeliveryEvent = function (id) {
-        var newEvent = new model.Event({ avatar_id:id, type:"DELIVER", date:Date.today().addWeeks(1), executed:false });
+        var newEvent = new model.Event({ avatarId:id, type:"DELIVER", date:Date.today().addWeeks(1), executed:false });
         newEvent.save(function (err) {
             if (err) // TODO handle the error
                 console.log('Could not create new event')
@@ -8,7 +8,7 @@ define(['savage/server', 'savage/model' , 'savage/util', 'cron'], function (serv
     };
 
     var createDeliveryNotification = function (id) {
-        var newNotification = new model.Notification({ avatar_id:id, type:"DELIVER_F", sent:false });
+        var newNotification = new model.Notification({ avatarId:id, type:"DELIVER_F", sent:false });
         if (Math.random() < .5) {
             newNotification.type = "DELIVER_M";
         }
@@ -32,9 +32,9 @@ define(['savage/server', 'savage/model' , 'savage/util', 'cron'], function (serv
                         var ev = events[i];
                         if (ev.date < Date.now()) {
                             if (ev.type == "DELIVER") {
-                                model.getOrCreatePlayer(ev.avatar_id, function (p) {
+                                model.getOrCreatePlayer(ev.avatarId, function (p) {
                                     p.status = "NORMAL";
-                                    createDeliveryNotification(p.avatar_id);
+                                    createDeliveryNotification(p.avatarId);
                                     p.update();
                                 });
                                 ev.executed = true;

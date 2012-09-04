@@ -30,12 +30,12 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
                     var usage = null;
                     for(var j = 0; j < nearest.usages.length; j++){
                         var u = nearest.usages[j];
-                        if(u.avatar_id == id){
+                        if(u.avatarId == id){
                             usage = u;
                         }
                     }
                     if(usage == null){
-                        usage = {avatar_id:id,uses:0,lastUsed:null};
+                        usage = {avatarId:id,uses:0,lastUsed:null};
                         nearest.usages.push(usage);
                     }
                     if(usage.uses>=3){
@@ -96,12 +96,12 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
                         var usage = null;
                         for(var j = 0; j < nearest.usages.length; j++){
                             var u = nearest.usages[j];
-                            if(u.avatar_id == id){
+                            if(u.avatarId == id){
                                 usage = u;
                             }
                         }
                         if(usage == null){
-                            usage = {avatar_id:id,uses:0,lastUsed:null};
+                            usage = {avatarId:id,uses:0,lastUsed:null};
                             nearest.usages.push(usage);
                         }
                         if(usage.uses>=3){

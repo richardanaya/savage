@@ -8,7 +8,8 @@ requirejs(
     [
         'vows',
         "vows/lib/vows/reporters/spec",
-        'savage/util_tests'
+        'savage/util_tests',
+        'savage/model_tests'
     ],
     function (vows, spec) {
         var i = 0;

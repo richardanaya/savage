@@ -16,8 +16,8 @@ define(function () {
 
             for(var i = 0 ; i < dataSources.length; i++){
                 var d = dataSources[i];
-                if(d['x-secondlife-owner-key'] || d['avatar_id']){
-                    return d['x-secondlife-owner-key'] || d['avatar_id'];
+                if(d['x-secondlife-owner-key'] || d['avatarId']){
+                    return d['x-secondlife-owner-key'] || d['avatarId'];
                 }
             }
             return  obj.DEFAULT_AVATAR_ID;

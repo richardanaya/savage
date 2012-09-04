@@ -3,7 +3,7 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util'], functi
         function (req, res) {
             var id = util.getId([req.headers,req.query]);
             model.Notification
-                .find({avatar_id:id, sent:false})
+                .find({avatarId:id, sent:false})
                 .exec(function (err, notifications) {
                     if (err) {
                         console.log('Error retrieving notifications.')

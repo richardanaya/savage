@@ -119,10 +119,10 @@ define(['vows', 'assert', 'savage/util'], function (vows, assert, util) {
                 assert.equal(topic, "123");
             }
         },
-        'Can get a avatar id if provided by query string "avatar_id"':{
+        'Can get a avatar id if provided by query string "avatarId"':{
             topic:function () {
                 return util.getId({
-                    "avatar_id":"abc"
+                    "avatarId":"abc"
                 })
             },
 

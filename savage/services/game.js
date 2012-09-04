@@ -8,6 +8,7 @@ define(['savage/server', 'savage/model', 'savage/util', 'cron'], function (serve
                 player.unclaim();
                 player.honor = 0;
                 player.save();
+                res.send("OK");
             });
         }
     );
