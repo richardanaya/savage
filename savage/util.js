@@ -53,7 +53,12 @@ define(function () {
             for(var i = 0 ; i < dataSources.length; i++){
                 var d = dataSources[i];
                 if(d['x-secondlife-region'] || d['sim']){
-                    return d['x-secondlife-region'] || d['sim'];
+                    var sim =  d['x-secondlife-region'] || d['sim'];
+                    if(sim.indexOf('(')!= -1) {
+                        sim = sim.substr(0,sim.indexOf('(')-1);
+                    }
+                    sim = sim.trim();
+                    return sim
                 }
             }
             return  obj.DEFAULT_SIM;

@@ -68,6 +68,17 @@ define(['vows', 'assert', 'savage/util'], function (vows, assert, util) {
                 assert.equal(topic, "Sexy");
             }
         },
+        'Can get a sim name if provided by query string "sim 123"':{
+            topic:function () {
+                return util.getSim({
+                    "sim":"Sexy (123)"
+                })
+            },
+
+            'we get the sim name':function (topic) {
+                assert.equal(topic, "Sexy");
+            }
+        },
         'Can get a default avatar name if none provided':{
             topic:function () {
                 return util.getName({})
