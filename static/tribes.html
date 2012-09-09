@@ -11,13 +11,21 @@
 
 </body>
 <script>
+    var prettyName = function(n){
+        if(n.match(/ Resident$/)){
+            var s = " Resident";
+            n = n.substr(0, n.length-s.length)
+        }
+        return n;
+    };
+
     $.getJSON('tribe/all',function(tribes){
         for(var i = 0 ; i < tribes.length; i++){
             var t = tribes[i];
             var rootElement = $('<div class="tribe">Tribe: '+t.name+' Honor:'+ t.honor+' Size:'+ t.size+'</div>').get(0);
             $(document.body).append(rootElement)
             var buildTribe = function(parentelement,node){
-                var el = $('<div class="tribeMember">'+node.name+' Honor: '+node.honor+'</div>').get(0);
+                var el = $('<div class="tribeMember">'+prettyName(node.name)+' Honor: '+node.honor+'</div>').get(0);
                 $(parentelement).append(el);
                 for(var j = 0 ; j < node.claims.length; j++){
                     buildTribe(el, node.claims[j]);

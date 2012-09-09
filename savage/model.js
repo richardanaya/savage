@@ -124,7 +124,7 @@ define(['mongoose'], function (mongoose) {
     };
 
     schema = mongoose.Schema({ tool:'string', x:'number', y:'number', z:'number', sim:'string', resources:['string'],
-        usages:[{avatarId:'string', uses:'number', lastUsed:Date}], uses: { type: 'number', default: '3' }});
+        usages:[{avatarId:'string', uses:'number', lastUsed:Date}], uses: { type: 'number', default: '1' }, occurrence: { type: 'string', default: 'EVERYDAY' }});
     var Resource = db.model('Resource', schema);
 
     var getOrCreatePlayer = function (id, callback) {

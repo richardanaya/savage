@@ -1,4 +1,4 @@
-define(['savage/server', 'savage/model' , 'savage/util'], function (server, model, util) {
+define(['savage/server', 'savage/model' , 'savage/util', 'underscore'], function (server, model, util, _) {
     server.get('/tribe/claim',
         function (req, res) {
             var id = util.getId([req.headers, req.query]);
@@ -31,6 +31,23 @@ define(['savage/server', 'savage/model' , 'savage/util'], function (server, mode
             });
         }
     );
+
+    server.get('/tribe/sacrifice',function (req, res) {
+        var respected_items =  [
+            "minx",
+            "grouse",
+            "snake"
+        ];
+        var sacrificer = req.query.sacrificer;
+        var item = req.query.item;
+        if(_.include(respected_items,item)){
+            model.getOrCreatePlayer(sacrificer,function(p){
+                p.honor += 1;
+                p.save();
+            });
+        }
+        res.send('OK')
+    });
 
     server.get('/tribe/all',function (req, res) {
         var ts = [];

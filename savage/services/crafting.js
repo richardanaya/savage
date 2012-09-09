@@ -1,6 +1,25 @@
-define(['savage/server', 'savage/model' , 'savage/store', 'savage/util','underscore'], function (server, model, store, util,_) {
+define(['savage/server', 'savage/model' , 'savage/store', 'savage/util', 'underscore'], function (server, model, store, util, _) {
     var FAR_DISTANCE = 8;
-    var CLOSE_DISTANCE = 3;
+    var CLOSE_DISTANCE = 2;
+
+    var isOccurring = function (occurrence) {
+        var d = new Date();
+        if (occurrence == "EVERYDAY") {
+            return true;
+        }
+        else if (occurrence == "EVENDAYS") {
+            if (d.getOrdinalNumber() % 2 == 0) {
+                return true;
+            }
+        }
+        else if (occurrence == "ODDDAYS") {
+            if (d.getOrdinalNumber() % 2 == 1) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     server.get('/crafting/find',
         function (req, res) {
             var id = util.getId([req.headers, req.query]);
@@ -17,7 +36,8 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util','undersc
                     for (var i = 0; i < docs.length; i++) {
                         var r = docs[i];
                         var d = Math.sqrt(Math.pow(r.x - px, 2) + Math.pow(r.y - py, 2));//+Math.pow(r.z-pz, 2)
-                        if (d < dist && d < FAR_DISTANCE) {
+                        var occurring = isOccurring(r.occurrence);
+                        if (occurring && d < dist && d < FAR_DISTANCE && pz < 100) {
                             dist = d;
                             nearest = r;
                         }
@@ -34,14 +54,10 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util','undersc
                             usage = u;
                         }
                     }
-                    if (usage == null) {
-                        usage = {avatarId:id, uses:0, lastUsed:null};
-                        nearest.usages.push(usage);
-                    }
-                    if (usage.uses >= 3) {
+
+                    if (usage != null && usage.uses >= nearest.uses) {
                         var n = new Date();
                         n.addMinutes(-30);
-                        debugger;
                         if (n >= usage.lastUsed) {
                             usage.uses = 1;
                             usage.lastUsed = Date.now();
@@ -53,9 +69,17 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util','undersc
                         }
                     }
                     else {
-                        usage.uses += 1;
-                        usage.lastUsed = Date.now();
-                        nearest.save();
+                        if (usage == null) {
+                            usage = {avatarId:id, uses:1, lastUsed:Date.now()};
+                            nearest.usages.push(usage);
+                            nearest.save();
+                        }
+                        else {
+                            usage.uses = usage.uses + 1;
+                            usage.lastUsed = Date.now();
+                            nearest.save();
+                        }
+
                         res.send(util.randomElement(nearest.resources) + '|Using your ' + tool + ' you retrieve something.');
                     }
                 }
@@ -82,7 +106,8 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util','undersc
                     for (var i = 0; i < docs.length; i++) {
                         var r = docs[i];
                         var d = Math.sqrt(Math.pow(r.x - px, 2) + Math.pow(r.y - py, 2)); //+Math.pow(r.z-pz, 2)
-                        if (d < dist && d < FAR_DISTANCE) {
+                        var occurring = isOccurring(r.occurrence);
+                        if (occurring && d < dist && d < FAR_DISTANCE  && pz < 100) {
                             dist = d;
                             nearest = r;
                         }
@@ -100,11 +125,8 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util','undersc
                             usage = u;
                         }
                     }
-                    if (usage == null) {
-                        usage = {avatarId:id, uses:0, lastUsed:null};
-                        nearest.usages.push(usage);
-                    }
-                    if (usage.uses >= 3) {
+
+                    if (usage != null && usage.uses >= nearest.uses) {
                         var n = new Date();
                         n.addMinutes(-30);
                         if (n >= usage.lastUsed) {
@@ -159,9 +181,9 @@ define(['savage/server', 'savage/model' , 'savage/store', 'savage/util','undersc
                 if (docs.length > 0) {
                     for (var i = 0; i < docs.length; i++) {
                         var r = docs[i];
-                        for(var j = 0 ; j < r.resources.length; j++){
+                        for (var j = 0; j < r.resources.length; j++) {
                             var r2 = r.resources[j];
-                            if(!_.include(masterItems,r2)){
+                            if (!_.include(masterItems, r2)) {
                                 failed.push(r);
                                 break;
                             }
