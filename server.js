@@ -11,7 +11,8 @@ requirejs(
         'savage/services/crafting',
         'savage/services/breeding',
         'savage/services/tribe',
-        'savage/services/notification'
+        'savage/services/notification',
+        'savage/services/divine'
     ],
     function (server) {
     }

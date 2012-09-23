@@ -14,6 +14,11 @@ define(['mongoose'], function (mongoose) {
     schema = mongoose.Schema({ avatarId:'string', name:'string', status:'string', gender:'string', honor:'number', owner:'string', tribe:{ type:mongoose.Schema.Types.ObjectId, ref:'Tribe' }, claims:['string']});
     var Player = db.model('Player', schema);
 
+    schema = mongoose.Schema({ avatarId:'string', god:'string', prayer:'string', created:{ type:Date, default:Date.now() }});
+    var Prayer = db.model('Prayer', schema);
+
+    schema = mongoose.Schema({ avatarId:'string', god:'string', sacrifice:'string', created:{ type:Date, default:Date.now() }});
+    var Sacrifice = db.model('Sacrifice', schema);
 
     schema = mongoose.Schema({ hierarchy:mongoose.Schema.Types.Mixed, name: { type: 'string', default: '???' } });
     var Tribe = db.model('Tribe', schema);
@@ -148,6 +153,8 @@ define(['mongoose'], function (mongoose) {
         Notification:Notification,
         Event:Event,
         Player:Player,
+        Prayer:Prayer,
+        Sacrifice:Sacrifice,
         Tribe:Tribe,
         Resource:Resource,
         getOrCreatePlayer:getOrCreatePlayer

@@ -1,0 +1,41 @@
+<html>
+<head>
+    <title>Divine</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+</head>
+<body>
+
+</body>
+<script>
+    var prettyName = function(n){
+        if(n.match(/ Resident$/)){
+            var s = " Resident";
+            n = n.substr(0, n.length-s.length)
+        }
+        return n;
+    };
+
+    $.getJSON('divine/all',function(things){
+        console.log(things);
+        for(var i = 0 ; i < things.length; i++){
+            var thing = things[i];
+            var title = ""
+            var body = "";
+            if(thing.prayer){
+                title = "Prayer for "+thing.god+" - "+thing.name+" ("+thing.avatarId+")";
+                body = thing.prayer;
+            }
+            if(thing.sacrifice){
+                title = "Sacrifice for "+thing.god+" - "+thing.name+" ("+thing.avatarId+")";
+                body = thing.sacrifice;
+            }
+            body = body.replace('\n','<br>')
+            $(document.body).append("<div><div>"+title+"</div><pre>"+ body +"</pre></div>");
+        }
+    });
+</script>
+</html>
